@@ -1,4 +1,4 @@
-import 'package:dapp/models/intromodel.dart';
+import 'package:wallet/models/intromodel.dart';
 import 'package:get/get.dart';
 
 class IntroControlller extends GetxController {

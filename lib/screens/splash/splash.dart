@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dapp/controllers/intro_controller.dart';
-import 'package:dapp/screens/intro/intro.dart';
-import 'package:dapp/utils/dimensions.dart';
+import 'package:wallet/controllers/intro_controller.dart';
+import 'package:wallet/screens/intro/intro.dart';
+import 'package:wallet/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,6 +1,6 @@
-import 'package:dapp/utils/dimensions.dart';
-import 'package:dapp/utils/global_style.dart';
-import 'package:dapp/widgets/customTextField.dart';
+import 'package:wallet/utils/dimensions.dart';
+import 'package:wallet/utils/global_style.dart';
+import 'package:wallet/widgets/customTextField.dart';
 import 'package:flutter/material.dart';
 
 class SignupEmailScreen extends StatelessWidget {

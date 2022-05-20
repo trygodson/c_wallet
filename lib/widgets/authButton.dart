@@ -1,4 +1,4 @@
-import 'package:dapp/utils/dimensions.dart';
+import 'package:wallet/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class OriginalButton extends StatelessWidget {

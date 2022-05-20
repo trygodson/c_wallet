@@ -1,4 +1,4 @@
-import 'package:dapp/screens/splash/splash.dart';
+import 'package:wallet/screens/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import './helpers/dependencies.dart' as dep;

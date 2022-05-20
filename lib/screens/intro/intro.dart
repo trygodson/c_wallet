@@ -1,8 +1,8 @@
-import 'package:dapp/controllers/intro_controller.dart';
-import 'package:dapp/models/intromodel.dart';
-import 'package:dapp/screens/signup/signup_email/signup_email.dart';
-import 'package:dapp/utils/dimensions.dart';
-import 'package:dapp/widgets/authButton.dart';
+import 'package:wallet/controllers/intro_controller.dart';
+import 'package:wallet/models/intromodel.dart';
+import 'package:wallet/screens/signup/signup_email/signup_email.dart';
+import 'package:wallet/utils/dimensions.dart';
+import 'package:wallet/widgets/authButton.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

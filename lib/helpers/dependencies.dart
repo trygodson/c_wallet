@@ -1,4 +1,4 @@
-import 'package:dapp/controllers/intro_controller.dart';
+import 'package:wallet/controllers/intro_controller.dart';
 import 'package:get/get.dart';
 
 Future<void> init() async {

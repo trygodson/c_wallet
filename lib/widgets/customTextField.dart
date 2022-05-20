@@ -1,4 +1,4 @@
-import 'package:dapp/utils/global_style.dart';
+import 'package:wallet/utils/global_style.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
