@@ -5,10 +5,12 @@ class OriginalButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final Color color;
+  bool isIcon;
   final Color textColor;
 
-  const OriginalButton(
+  OriginalButton(
       {Key? key,
+      this.isIcon = true,
       required this.text,
       required this.onPressed,
       required this.color,
@@ -31,8 +33,9 @@ class OriginalButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.mail_rounded, color: Colors.white),
-                  SizedBox(width: Dimensions.getProportionalWidth(15)),
+                  Icon(isIcon ? Icons.mail_rounded : null, color: Colors.white),
+                  SizedBox(
+                      width: Dimensions.getProportionalWidth(isIcon ? 15 : 0)),
                   Text(
                     text,
                     style: TextStyle(

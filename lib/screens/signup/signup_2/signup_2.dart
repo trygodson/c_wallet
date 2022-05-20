@@ -1,15 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
-import 'package:wallet/screens/signup/signup_2/signup_2.dart';
+import 'package:wallet/screens/root/index.dart';
 import 'package:wallet/utils/dimensions.dart';
 import 'package:wallet/utils/global_style.dart';
 import 'package:wallet/widgets/authButton.dart';
 import 'package:wallet/widgets/customTextField.dart';
 import 'package:flutter/material.dart';
 
-class SignupEmailScreen extends StatelessWidget {
-  TextEditingController _emailcontroller = TextEditingController();
-  SignupEmailScreen({Key? key}) : super(key: key);
+class Signup2 extends StatelessWidget {
+  TextEditingController _namecontroller = TextEditingController();
+  TextEditingController _passwordcontroller = TextEditingController();
+  Signup2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,25 +35,35 @@ class SignupEmailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Whats Your \nEmail Address',
+                  Text('Let\'s sign you Up!',
                       style: GlobalStyle.authScreenBold),
                   SizedBox(
                     height: Dimensions.getProportionalHeight(20),
                   ),
-                  Text('Email Address', style: GlobalStyle.textInputLabelStyle),
+                  Text('Your Name', style: GlobalStyle.textInputLabelStyle),
                   CustomTextField(
-                    etEmail: _emailcontroller,
-                    labelText: 'Email Address',
+                    etEmail: _namecontroller,
+                    labelText: 'Your Name',
+                  ),
+                  SizedBox(
+                    height: Dimensions.getProportionalHeight(10),
+                  ),
+                  Text('Your Password', style: GlobalStyle.textInputLabelStyle),
+                  CustomTextField(
+                    etEmail: _passwordcontroller,
+                    labelText: 'Your Password',
+                    obscureText: true,
                   ),
                   SizedBox(
                     height: Dimensions.getProportionalHeight(40),
                   ),
                   OriginalButton(
-                    text: 'Continue with email',
+                    text: 'Login',
+                    isIcon: false,
                     color: Colors.white,
                     textColor: Colors.lightBlue,
                     onPressed: () {
-                      Get.to(() => Signup2());
+                      Get.to(() => RootScreen());
                     },
                   ),
                   SizedBox(
@@ -105,32 +116,35 @@ class SignupEmailScreen extends StatelessWidget {
                           border:
                               Border.all(color: Colors.grey[100]!, width: 1),
                         ),
-                        child: Center(),
                       )
                     ],
                   ),
                   SizedBox(height: Dimensions.getProportionalHeight(20)),
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                          text: 'Don\'t have an account?  ',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: Dimensions.getProportionalHeight(14),
-                          ),
-                          children: [
-                            TextSpan(
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = (() => Get.to(() => null,
-                                    transition: Transition.fadeIn)),
-                              text: 'Sign up',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: Dimensions.getProportionalHeight(14),
-                              ),
-                            )
-                          ]),
+                  Container(
+                    width: double.maxFinite,
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Don\'t have an account?  ',
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: Dimensions.getProportionalHeight(14),
+                            ),
+                            children: [
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = (() => Get.to(() => null,
+                                      transition: Transition.fadeIn)),
+                                text: 'Sign in',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      Dimensions.getProportionalHeight(14),
+                                ),
+                              )
+                            ]),
+                      ),
                     ),
                   ),
                 ],

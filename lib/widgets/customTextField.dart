@@ -45,7 +45,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       textAlign: TextAlign.start,
       keyboardType: TextInputType.emailAddress,
       controller: widget.etEmail,
-      style: GlobalStyle.normalStyle,
+      style: GlobalStyle.textInputStyle,
       decoration: InputDecoration(
         filled: true,
         focusColor: Colors.white,
@@ -57,7 +57,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey, width: 2)),
-        labelText: widget.labelText,
+        // labelText: widget.labelText,
         labelStyle: TextStyle(
           color: Colors.blue,
         ),
