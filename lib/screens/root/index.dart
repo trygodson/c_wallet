@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:wallet/controllers/usercontroller.dart';
+import 'package:wallet/helpers/contractFunction.dart';
 import 'package:wallet/screens/root/dashboard/dashboard.dart';
+import 'package:wallet/screens/root/profile/profile.dart';
+import 'package:wallet/screens/root/wallet/wallet.dart' as walletscreen;
 import 'package:wallet/utils/appColors.dart';
+import 'package:wallet/utils/constraint.dart';
 import 'package:wallet/utils/dimensions.dart';
 import 'package:wallet/widgets/bottombar_item.dart';
+import 'package:web3dart/web3dart.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({Key? key}) : super(key: key);
@@ -12,6 +20,17 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootAppState extends State<RootScreen> {
+  Web3Client? ethClient;
+  Client? httpClient;
+  @override
+  void initState() {
+    httpClient = Client();
+    ethClient = Web3Client(infruraUrl, httpClient!);
+    Get.put(ContractFunctionController());
+
+    super.initState();
+  }
+
   int activeTab = 0;
   List barItems = [
     {
@@ -21,23 +40,9 @@ class _RootAppState extends State<RootScreen> {
       "title": ""
     },
     {
-      "icon": Icons.search_outlined,
-      "active_icon": Icons.account_balance_wallet_outlined,
-      "page": Container(
-        child: Center(
-          child: Text('Wallet'),
-        ),
-      ),
-      "title": ""
-    },
-    {
-      "icon": Icons.favorite_border,
-      "active_icon": Icons.favorite_outlined,
-      "page": Container(
-        child: Center(
-          child: Text('send and receive'),
-        ),
-      ),
+      "icon": Icons.account_balance_wallet_outlined,
+      "active_icon": Icons.account_balance_wallet,
+      "page": walletscreen.Wallet(),
       "title": ""
     },
     {
@@ -51,13 +56,9 @@ class _RootAppState extends State<RootScreen> {
       "title": ""
     },
     {
-      "icon": Icons.settings_outlined,
-      "active_icon": Icons.settings_rounded,
-      "page": Container(
-        child: Center(
-          child: Text('Settings'),
-        ),
-      ),
+      "icon": Icons.person_outline,
+      "active_icon": Icons.person,
+      "page": ProfileScreen(),
       "title": ""
     },
   ];
@@ -72,6 +73,8 @@ class _RootAppState extends State<RootScreen> {
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
     );
+    // return GetBuilder<UserController>(builder: (controller) {
+    // });
   }
 
   Widget getBarPage() {

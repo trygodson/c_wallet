@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
+import 'package:wallet/controllers/usercontroller.dart';
+import 'package:wallet/controllers/wallet_creation.dart';
+import 'package:wallet/helpers/contractFunction.dart' as ctFunction;
+import 'package:wallet/screens/root/wallet/addWallet/addwallet.dart';
 import 'package:wallet/utils/appColors.dart';
+import 'package:wallet/utils/constraint.dart';
+import 'package:wallet/utils/dimensions.dart';
+import 'package:wallet/widgets/appbar.dart';
 import 'package:wallet/widgets/balance_card.dart';
 import 'package:wallet/widgets/bottom_navigation_bar.dart';
+import 'package:wallet/widgets/custom_transaction_icon.dart';
 import 'package:wallet/widgets/title_text.dart';
+import 'package:web3dart/credentials.dart';
+import 'package:web3dart/web3dart.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({Key? key}) : super(key: key);
@@ -14,72 +26,20 @@ class Dashboard extends StatefulWidget {
 }
 
 class _HomePageState extends State<Dashboard> {
-  Widget _appBar() {
-    return Row(
-      children: <Widget>[
-        CircleAvatar(
-          backgroundImage: NetworkImage(
-              "https://jshopping.in/images/detailed/591/ibboll-Fashion-Mens-Optical-Glasses-Frames-Classic-Square-Wrap-Frame-Luxury-Brand-Men-Clear-Eyeglasses-Frame.jpg"),
-        ),
-        SizedBox(width: 15),
-        TitleText(text: "Hello,"),
-        Text(' Janth,',
-            style: GoogleFonts.mulish(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.navyBlue2)),
-        Expanded(
-          child: SizedBox(),
-        ),
-        Icon(
-          Icons.short_text,
-          color: Theme.of(context).iconTheme.color,
-        )
-      ],
-    );
-  }
+  String? priviteAddress;
+  dynamic balance = 0;
+  Web3Client? ethClient;
+  Client? httpClient;
 
   Widget _operationsWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        _icon(Icons.transfer_within_a_station, "Transfer"),
-        _icon(Icons.phone, "Airtime"),
-        _icon(Icons.payment, "Pay Bills"),
-        _icon(Icons.code, "Qr Pay"),
-      ],
-    );
-  }
-
-  Widget _icon(IconData icon, String text) {
-    return Column(
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/transfer');
-          },
-          child: Container(
-            height: 80,
-            width: 80,
-            margin: EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Color(0xfff3f3f3),
-                      offset: Offset(5, 5),
-                      blurRadius: 10)
-                ]),
-            child: Icon(icon),
-          ),
-        ),
-        Text(text,
-            style: GoogleFonts.mulish(
-                textStyle: Theme.of(context).textTheme.headline4,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Color(0xff76797e))),
+        CustomTransactionIcon(icon: Icons.arrow_upward_sharp, text: "Send"),
+        CustomTransactionIcon(
+            icon: Icons.arrow_downward_sharp, text: "Receive"),
+        CustomTransactionIcon(icon: Icons.tag_sharp, text: "Buy"),
+        // _icon(Icons.currency_exchange, "Swap"),
       ],
     );
   }
@@ -112,64 +72,119 @@ class _HomePageState extends State<Dashboard> {
       ),
       subtitle: Text(time),
       trailing: Container(
-          height: 30,
-          width: 60,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppColors.lightGrey,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Text('-20 MLR',
-              style: GoogleFonts.mulish(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.navyBlue2))),
+        height: 30,
+        width: 60,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.lightGrey,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Text(
+          '-20 MLR',
+          style: GoogleFonts.mulish(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.navyBlue2),
+        ),
+      ),
     );
   }
 
   @override
+  void initState() {
+    httpClient = Client();
+    ethClient = Web3Client(infruraUrl, httpClient!);
+
+    super.initState();
+    sn();
+  }
+
+  sn() async {
+    await Get.find<UserController>().getCurrentUserDoc();
+    dynamic data = await Get.find<UserController>().currentUserDoc;
+    if (data != null) {
+      setState(() async {
+        priviteAddress = data['privateKey'];
+        var temp = EthPrivateKey.fromHex(priviteAddress!);
+        var cred = temp.address;
+
+        Get.find<ctFunction.ContractFunctionController>()
+            .getBalance(cred, ethClient!);
+        balance = Get.find<ctFunction.ContractFunctionController>().balance;
+      });
+    } else {
+      Get.snackbar('Balance Error', 'Data is Null');
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    sn();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigation(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 35),
-                _appBar(),
-                SizedBox(
-                  height: 40,
-                ),
-                TitleText(text: "My wallet"),
-                SizedBox(
-                  height: 20,
-                ),
-                BalanceCard(),
-                SizedBox(
-                  height: 50,
-                ),
-                TitleText(
-                  text: "Operations",
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                _operationsWidget(),
-                SizedBox(
-                  height: 40,
-                ),
-                TitleText(
-                  text: "Transactions",
-                ),
-                _transectionList(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+    return GetBuilder<UserController>(builder: ((controller) {
+      return Scaffold(
+        bottomNavigationBar: BottomNavigation(),
+        body: controller.loading
+            ? Center(
+                child: CircularProgressIndicator(
+                    strokeWidth: 2, color: Colors.black))
+            : controller.currentUserDoc == null
+                ? Center(
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          var service = Get.find<WalletAddressController>();
+                          final mnemonic = service.generateMnemonic();
+                          Get.to(() => AddWallet(
+                                mnemonic: mnemonic,
+                              ));
+                        },
+                        child: Text('Create A Wallet')),
+                  )
+                : SafeArea(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 35),
+                            CustomAppBar(
+                                name: controller.currentUserDoc['user_name']),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            TitleText(text: "My wallet"),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            BalanceCard(balance: balance.toString()),
+                            SizedBox(
+                              height: 50,
+                            ),
+                            TitleText(
+                              text: "Transactions",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _operationsWidget(),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            TitleText(
+                              text: "Assets",
+                            ),
+                            _transectionList(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+      );
+    }));
   }
 }

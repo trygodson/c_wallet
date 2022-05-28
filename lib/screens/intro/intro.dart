@@ -1,6 +1,7 @@
 import 'package:wallet/controllers/intro_controller.dart';
 import 'package:wallet/models/intromodel.dart';
 import 'package:wallet/screens/signup/signup_email/signup_email.dart';
+import 'package:wallet/utils/appColors.dart';
 import 'package:wallet/utils/dimensions.dart';
 import 'package:wallet/widgets/authButton.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -123,7 +124,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 dotsCount: intro.sliderStuffs.length,
                 position: _currPageValue,
                 decorator: DotsDecorator(
-                  activeColor: Colors.blue,
+                  activeColor: AppColors.navyBlue1,
                   size: const Size.square(9.0),
                   activeSize: const Size(18.0, 9.0),
                   activeShape: RoundedRectangleBorder(
@@ -138,8 +139,8 @@ class _IntroScreenState extends State<IntroScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: OriginalButton(
                 text: 'Continue with email',
-                color: Colors.white,
-                textColor: Colors.lightBlue,
+                color: AppColors.navyBlue1,
+                textColor: Colors.white,
                 onPressed: () {
                   Get.to(() => SignupEmailScreen());
                 },

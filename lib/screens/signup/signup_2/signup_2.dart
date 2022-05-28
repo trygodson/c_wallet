@@ -1,16 +1,48 @@
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
+import 'package:wallet/controllers/authController.dart';
 import 'package:wallet/screens/root/index.dart';
+import 'package:wallet/utils/appColors.dart';
 import 'package:wallet/utils/dimensions.dart';
 import 'package:wallet/utils/global_style.dart';
 import 'package:wallet/widgets/authButton.dart';
 import 'package:wallet/widgets/customTextField.dart';
 import 'package:flutter/material.dart';
 
-class Signup2 extends StatelessWidget {
-  TextEditingController _namecontroller = TextEditingController();
-  TextEditingController _passwordcontroller = TextEditingController();
+class Signup2 extends StatefulWidget {
   Signup2({Key? key}) : super(key: key);
+
+  @override
+  State<Signup2> createState() => _Signup2State();
+}
+
+class _Signup2State extends State<Signup2> {
+  TextEditingController _namecontroller = TextEditingController();
+
+  TextEditingController _passwordcontroller = TextEditingController();
+
+  dynamic argumentData = Get.arguments;
+
+  // late authcontroller = Get.find<AuthController>();
+  bool _obscureText = true;
+  IconData _iconVisible = Icons.visibility_off;
+  void _toggleObscureText() {
+    setState(() {
+      _obscureText = !_obscureText;
+      if (_obscureText == true) {
+        _iconVisible = Icons.visibility_off;
+      } else {
+        _iconVisible = Icons.visibility;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _namecontroller.dispose();
+    _passwordcontroller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +73,77 @@ class Signup2 extends StatelessWidget {
                     height: Dimensions.getProportionalHeight(20),
                   ),
                   Text('Your Name', style: GlobalStyle.textInputLabelStyle),
-                  CustomTextField(
-                    etEmail: _namecontroller,
-                    labelText: 'Your Name',
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty)
+                        Get.snackbar('Error', 'Please Enter Name');
+                      return null;
+                    },
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.blueAccent,
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _namecontroller,
+                    style: GlobalStyle.textInputStyle,
+                    decoration: InputDecoration(
+                      filled: true,
+                      focusColor: Colors.white,
+                      // fillColor: grey,
+                      // hoverColor: grey,
+                      fillColor: Colors.white,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 2)),
+                      // labelText: widget.labelText,
+                      labelStyle: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: Dimensions.getProportionalHeight(10),
                   ),
                   Text('Your Password', style: GlobalStyle.textInputLabelStyle),
-                  CustomTextField(
-                    etEmail: _passwordcontroller,
-                    labelText: 'Your Password',
-                    obscureText: true,
+                  TextFormField(
+                    obscureText: _obscureText,
+                    validator: (value) {
+                      if (value!.isEmpty)
+                        Get.snackbar('Error', 'Please Enter Password');
+                      return null;
+                    },
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.blueAccent,
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _passwordcontroller,
+                    style: GlobalStyle.textInputStyle,
+                    decoration: InputDecoration(
+                      filled: true,
+                      focusColor: Colors.white,
+                      // fillColor: grey,
+                      // hoverColor: grey,
+                      fillColor: Colors.white,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 2)),
+                      // labelText: widget.labelText,
+                      labelStyle: TextStyle(
+                        color: Colors.blue,
+                      ),
+                      suffixIcon: _obscureText
+                          ? IconButton(
+                              icon: Icon(_iconVisible,
+                                  color: Colors.grey[400], size: 20),
+                              onPressed: () {
+                                _toggleObscureText();
+                              },
+                            )
+                          : null,
+                    ),
                   ),
                   SizedBox(
                     height: Dimensions.getProportionalHeight(40),
@@ -60,10 +151,19 @@ class Signup2 extends StatelessWidget {
                   OriginalButton(
                     text: 'Login',
                     isIcon: false,
-                    color: Colors.white,
-                    textColor: Colors.lightBlue,
+                    textColor: Colors.white,
+                    color: AppColors.navyBlue1,
                     onPressed: () {
-                      Get.to(() => RootScreen());
+                      var authcontroller = Get.find<AuthController>();
+                      authcontroller
+                          .signIn(argumentData[0]['email'],
+                              _passwordcontroller.text.trim())
+                          .then((value) {
+                        print(value);
+                      });
+                      // Get.to(
+                      //   () => RootScreen(),
+                      // );
                     },
                   ),
                   SizedBox(
@@ -137,7 +237,7 @@ class Signup2 extends StatelessWidget {
                                       transition: Transition.fadeIn)),
                                 text: 'Sign in',
                                 style: TextStyle(
-                                  color: Colors.blue,
+                                  color: AppColors.navyBlue1,
                                   fontWeight: FontWeight.bold,
                                   fontSize:
                                       Dimensions.getProportionalHeight(14),

@@ -1,10 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:wallet/screens/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import './helpers/dependencies.dart' as dep;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await dep.init();
+
   runApp(const MyApp());
 }
 

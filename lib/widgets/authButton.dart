@@ -27,8 +27,7 @@ class OriginalButton extends StatelessWidget {
           child: Container(
             height: Dimensions.getProportionalHeight(60),
             decoration: BoxDecoration(
-                color: Colors.blue[400],
-                borderRadius: BorderRadius.circular(10)),
+                color: color, borderRadius: BorderRadius.circular(10)),
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -39,7 +38,7 @@ class OriginalButton extends StatelessWidget {
                   Text(
                     text,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: textColor,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),

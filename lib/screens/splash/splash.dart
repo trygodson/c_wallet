@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:wallet/controllers/authController.dart';
 import 'package:wallet/controllers/intro_controller.dart';
 import 'package:wallet/screens/intro/intro.dart';
+import 'package:wallet/screens/root/index.dart';
+import 'package:wallet/screens/sign/index.dart';
 import 'package:wallet/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +20,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   _loadResources() async {
     await Get.find<IntroControlller>();
+    await Get.find<AuthController>();
   }
+
+  // late User? user;
 
   @override
   initState() {
@@ -25,7 +32,13 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       Duration(seconds: 3),
       () {
-        Get.to(() => IntroScreen());
+        //  user = Get.find<IntroControlller>().user as User;
+
+        Get.offAll(() => SignData());
+        // if (Get.find<AuthController>().user == null) {
+        // } else {
+        //   Get.offAll(() => RootScreen());
+        // }
       },
     );
   }

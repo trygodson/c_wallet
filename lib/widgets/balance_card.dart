@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wallet/utils/appColors.dart';
 
 class BalanceCard extends StatelessWidget {
-  const BalanceCard({Key? key}) : super(key: key);
+  String? balance;
+  BalanceCard({this.balance, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class BalanceCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '6,354',
+                        balance ?? '',
                         style: GoogleFonts.mulish(
                             textStyle: Theme.of(context).textTheme.headline4,
                             fontSize: 35,
@@ -41,7 +42,7 @@ class BalanceCard extends StatelessWidget {
                             color: AppColors.yellow2),
                       ),
                       Text(
-                        ' MLR',
+                        ' \$',
                         style: TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.w500,
