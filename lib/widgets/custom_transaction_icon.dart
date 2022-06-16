@@ -9,8 +9,13 @@ class CustomTransactionIcon extends StatelessWidget {
   IconData icon;
   String text;
   double size;
+  GestureTapCallback function;
   CustomTransactionIcon(
-      {this.size = 80, required this.icon, required this.text, Key? key})
+      {this.size = 80,
+      required this.icon,
+      required this.function,
+      required this.text,
+      Key? key})
       : super(key: key);
 
   @override
@@ -18,7 +23,7 @@ class CustomTransactionIcon extends StatelessWidget {
     return Column(
       children: <Widget>[
         GestureDetector(
-          onTap: () {},
+          onTap: function,
           child: Container(
             height: size,
             width: size,

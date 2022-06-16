@@ -36,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () async {
                       await controller.signOut();
-                      Get.offAll(() => SignData());
+                      Get.off(() => SignData());
                     },
                     child: Text('Log out'))
               ]),

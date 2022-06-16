@@ -33,25 +33,28 @@ class AuthController extends GetxController {
   // }
 
   Future googleLogin() async {
-    await googleSignIn.signOut();
-    final googleUser = await googleSignIn.signIn();
-    loading = true;
-    if (googleUser == null) return;
-    _guser = googleUser;
-
-    final googleAuth = await googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
     try {
-      await firebaseAuth.signInWithCredential(credential);
-      loading = false;
-      update();
-    } on FirebaseAuthException catch (e) {
+      await googleSignIn.signOut();
+      final googleUser = await googleSignIn.signIn();
+      loading = true;
+      if (googleUser == null) return;
+      _guser = googleUser;
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      try {
+        await firebaseAuth.signInWithCredential(credential);
+        loading = false;
+        update();
+      } on FirebaseAuthException catch (e) {
+        Get.snackbar('Error', e.toString());
+      }
+    } catch (e) {
       Get.snackbar('Error', e.toString());
     }
-    update();
   }
 
   Future<dynamic> signIn(String email, String password) async {

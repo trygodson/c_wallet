@@ -34,17 +34,17 @@ class _RootAppState extends State<RootScreen> {
   int activeTab = 0;
   List barItems = [
     {
-      "icon": Icons.home_outlined,
-      "active_icon": Icons.home_rounded,
+      "icon": Icons.account_balance_wallet_outlined,
+      "active_icon": Icons.account_balance_wallet,
       "page": Dashboard(),
       "title": ""
     },
-    {
-      "icon": Icons.account_balance_wallet_outlined,
-      "active_icon": Icons.account_balance_wallet,
-      "page": walletscreen.Wallet(),
-      "title": ""
-    },
+    // {
+    //   "icon": Icons.account_balance_wallet_outlined,
+    //   "active_icon": Icons.account_balance_wallet,
+    //   "page": walletscreen.Wallet(),
+    //   "title": ""
+    // },
     {
       "icon": Icons.forum_outlined,
       "active_icon": Icons.forum_rounded,

@@ -19,7 +19,7 @@ class GlobalStyle {
   static const TextStyle addresstextStyle = TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.w400,
-      fontSize: 19,
+      fontSize: 16,
       overflow: TextOverflow.ellipsis);
   static const TextStyle addressTitletextStyle = TextStyle(
       color: Colors.black,

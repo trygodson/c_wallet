@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wallet/screens/alltokens/index.dart';
 import 'package:wallet/utils/appColors.dart';
 import 'package:wallet/widgets/title_text.dart';
 
@@ -29,7 +31,7 @@ class CustomAppBar extends StatelessWidget {
           child: SizedBox(),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () => Get.toNamed('/alltoken'),
           child: Icon(
             Icons.short_text,
             color: Theme.of(context).iconTheme.color,

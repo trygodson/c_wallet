@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -6,15 +9,18 @@ import 'package:wallet/controllers/usercontroller.dart';
 import 'package:wallet/controllers/wallet_creation.dart';
 import 'package:wallet/screens/root/dashboard/dashboard.dart';
 import 'package:wallet/screens/root/wallet/walletcreated/walletcreated.dart';
+import 'package:wallet/utils/appColors.dart';
 import 'package:wallet/utils/dimensions.dart';
 import 'package:wallet/utils/global_style.dart';
 
 class AddWallet extends StatelessWidget {
   String mnemonic;
+  bool loading = false;
   AddWallet({required this.mnemonic, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var listmnemonic = mnemonic.split(" ");
     return Scaffold(body: GetBuilder<UserController>(builder: (usercontroller) {
       return Container(
         width: Dimensions.screenWidth,
@@ -26,26 +32,75 @@ class AddWallet extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                mnemonic,
-                style: GlobalStyle.addresstextStyle,
-                overflow: TextOverflow.clip,
-                textAlign: TextAlign.center,
+              Container(
+                height: Dimensions.getProportionalHeight(250),
+                width: Dimensions.screenWidth * 0.8,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2, color: AppColors.navyBlue1),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Wrap(alignment: WrapAlignment.center, children: [
+                      for (var i = 0; i < listmnemonic.length; i++)
+                        RichText(
+                            text: TextSpan(
+                                text: '${i + 1} ',
+                                style: TextStyle(
+                                    height: 1.3,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Colors.primaries[Random()
+                                        .nextInt(Colors.primaries.length)]),
+                                children: [
+                              TextSpan(
+                                text: '${listmnemonic[i]}  ',
+                                style: TextStyle(
+                                    height: 1.5,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 22,
+                                    color: Colors.black),
+                              )
+                            ]))
+                    ]),
+                    InkWell(
+                      onTap: () {
+                        FlutterClipboard.copy(mnemonic).then(
+                          (value) => Get.snackbar('copy success',
+                              '12 word phase copied successful'),
+                        );
+                      },
+                      child: Container(
+                        width: double.maxFinite,
+                        height: 35,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Copy',
+                              style: TextStyle(
+                                  color: AppColors.navyBlue1,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            SizedBox(
+                              width: Dimensions.getProportionalWidth(20),
+                            ),
+                            Icon(Icons.content_copy)
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
               SizedBox(
                 height: 30,
               ),
               GestureDetector(
                 onTap: () async {
-                  final walletcontroller = Get.find<WalletAddressController>();
-                  final privKey =
-                      await walletcontroller.getPrivateKey(mnemonic);
-                  final pubKey = await walletcontroller.getPublicKey(privKey);
-                  usercontroller.addUserDetails(privKey, pubKey);
-                  Get.off(() => WalletCreated(
-                        privkey: privKey,
-                        pubKey: pubKey.toString(),
-                      ));
+                  usercontroller.addUserDetails(mnemonic);
                 },
                 child: Container(
                   color: Color.fromARGB(255, 5, 21, 34),

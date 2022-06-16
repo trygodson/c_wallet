@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wallet/controllers/usercontroller.dart';
 import 'package:wallet/utils/appColors.dart';
 
 class BalanceCard extends StatelessWidget {
