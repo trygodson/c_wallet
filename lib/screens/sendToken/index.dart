@@ -39,8 +39,8 @@ class SendTokenScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
           child: Container(
-        height: double.maxFinite,
-        width: double.maxFinite,
+        height: Dimensions.screenHeight,
+        width: Dimensions.screenWidth,
         child: Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Column(
@@ -135,6 +135,7 @@ class SendTokenScreen extends StatelessWidget {
                 TextField(
                   controller: _receiverAmountController,
                   style: GlobalStyle.textInputStyle,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     filled: true,
                     focusColor: Colors.white,
@@ -153,6 +154,7 @@ class SendTokenScreen extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
                     suffixText: 'ETH',
+
                     suffixStyle:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),

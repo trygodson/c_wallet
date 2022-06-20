@@ -21,6 +21,7 @@ class WalletAddressController extends GetxController
   Future<String> getPrivateKey(String mnemonic) async {
     final seed = bip39.mnemonicToSeed(mnemonic);
     final master = await ED25519_HD_KEY.getMasterKeyFromSeed(seed);
+
     final privateKey = HEX.encode(master.key);
     return privateKey;
   }

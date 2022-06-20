@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wallet/controllers/usercontroller.dart';
 import 'package:wallet/screens/root/dashboard/dashboard.dart';
+import 'package:wallet/screens/root/index.dart';
 import 'package:wallet/utils/appColors.dart';
 import 'package:wallet/utils/global_style.dart';
 
@@ -95,7 +96,7 @@ class WalletCreated extends StatelessWidget {
           ElevatedButton(
               onPressed: () async {
                 await Get.find<UserController>().getCurrentUserDoc();
-                Get.to(() => Dashboard());
+                Get.to(() => RootScreen());
               },
               child: Text('Go'))
         ]),

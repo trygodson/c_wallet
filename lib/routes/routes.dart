@@ -14,18 +14,20 @@ class AppRoutes {
       page: () => SplashScreen(),
       transition: Transition.fade,
     ),
-    GetPage(
-      name: '/alltoken',
-      page: () => AllTokenScreen(),
-      transition: Transition.rightToLeft,
-      // binding: BindingsBuilder(
-      //   () {
-      //     Get.lazyPut(() => TokenRepo());
-      //     Get.put(() => AllTokenController(tokenRepo: Get.find()),
-      //         permanent: true);
-      //     Get.put(() => AddTokenToAssetController(), permanent: true);
-      //   },
-      // ),
-    ),
+    // GetPage(
+    //   name: '/alltoken',
+    //   page: () {
+    //     // return AllTokenScreen();
+    //   },
+    //   transition: Transition.rightToLeft,
+    //   // binding: BindingsBuilder(
+    //   //   () {
+    //   //     Get.lazyPut(() => TokenRepo());
+    //   //     Get.put(() => AllTokenController(tokenRepo: Get.find()),
+    //   //         permanent: true);
+    //   //     Get.put(() => AddTokenToAssetController(), permanent: true);
+    //   //   },
+    //   // ),
+    // ),
   ];
 }

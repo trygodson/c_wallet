@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:wallet/controllers/addTokenToAssetController.dart';
 import 'package:wallet/controllers/allTokenController.dart';
+import 'package:wallet/controllers/assetcontroller.dart';
 import 'package:wallet/widgets/all_token_item.dart';
 
 class AllTokenScreen extends StatelessWidget {
-  const AllTokenScreen({Key? key}) : super(key: key);
+  final Function refresh;
+  const AllTokenScreen({required this.refresh, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var dril = Get.arguments;
+    Get.find<AddTokenToAssetController>().assetController =
+        Get.find<AssetTokenController>();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -39,6 +45,7 @@ class AllTokenScreen extends StatelessWidget {
                         tokenname: tokencontroller.allToken()[index].tokenName!,
                         tokensymbol:
                             tokencontroller.allToken()[index].tokenSymbol!,
+                        func: refresh,
                         address:
                             tokencontroller.allToken()[index].deployedAddress!,
                         taken: tokencontroller.allToken()[index].taken!,

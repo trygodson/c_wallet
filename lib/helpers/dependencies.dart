@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallet/controllers/addTokenToAssetController.dart';
 import 'package:wallet/controllers/allTokenController.dart';
 import 'package:wallet/controllers/assetcontroller.dart';
@@ -12,7 +13,9 @@ import 'package:wallet/data/repository/tokenRepo.dart';
 import 'package:wallet/data/repository/web3ClientRepo.dart';
 import 'package:wallet/helpers/contractFunction.dart';
 
-init() {
+init() async {
+  final prefs = await SharedPreferences.getInstance();
+
   //Repositories
 
   Get.lazyPut(

@@ -8,9 +8,8 @@ import 'package:wallet/models/tokenmodel.dart';
 class AddTokenToAssetController extends GetxController {
   List<Map<String, dynamic>> assetToken = [];
   TokenRepo tokenRepo;
-
-  static AssetTokenController assetController =
-      AssetTokenController(web3Repo: Get.find());
+  List<Map<String, dynamic>> taz = [];
+  late AssetTokenController assetController;
 
   static AllTokenController alltokenController =
       AllTokenController(tokenRepo: Get.find());
@@ -18,19 +17,21 @@ class AddTokenToAssetController extends GetxController {
   AddTokenToAssetController({required this.tokenRepo});
 
   addTokenToAssetToken(TokenModel token) {
+    assetController = assetController;
     var tokens = alltokenController.allToken();
 
     if (!assetToken.any((element) => mapEquals(element, token.toJson()))) {
-      assetToken.add(token.toJson());
+      taz.add(token.toJson());
       // print();
       tokens[tokens.indexWhere((tokens) =>
               tokens.toJson()['tokenname'] == token.toJson()['tokenname'])]
           .taken = true;
       assetController.getBalance();
+
       update();
     }
+    // assetController.assetTokenRepo = taz;
     assetController.getBalance();
-
     update();
   }
 
@@ -39,7 +40,7 @@ class AddTokenToAssetController extends GetxController {
     // print(assetToken.asMap().containsKey(token.tokenName));
 
     if (assetToken.any((element) => mapEquals(element, token.toJson()))) {
-      assetToken.removeWhere(
+      taz.removeWhere(
           (element) => element['tokenname'] == token.toJson()['tokenname']);
       // print();
       tokens[tokens.indexWhere((tokens) =>
@@ -49,6 +50,7 @@ class AddTokenToAssetController extends GetxController {
       assetController.getBalance();
       update();
     }
+    // assetController.assetTokenRepo = taz;
     assetController.getBalance();
 
     update();

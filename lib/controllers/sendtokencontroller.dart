@@ -34,7 +34,7 @@ class SendTokenController extends GetxController {
     dynamic userdata = Get.find<UserController>().currentUserDoc;
     var priviteAddress = userdata['privateKey'];
     var publicAddress = userdata['publicKey'];
-
+    print(priviteAddress);
     var response = await submit(
         'transferFrom',
         [
@@ -46,7 +46,8 @@ class SendTokenController extends GetxController {
         priviteAddress,
         contract,
         deployedContractAddress);
-
+    TransactionInformation txn =
+        await web3Repo.ethClient!.getTransactionByHash(response);
     return response;
   }
 
@@ -117,13 +118,16 @@ class SendTokenController extends GetxController {
     _loading = true;
     update();
     try {
+      web3Repo.sn();
+
       var res = await sendcoin(amount, recipientAddress, deployedAddress);
       _loading = false;
       update();
-      Get.snackbar('Successful', 'Transaction hash ---> ${res.toString()}');
+      // Get.snackbar('Successful', 'Transaction hash ---> ${res.toString()}');
+      print('Transaction hash ---> ${res.toString()}');
     } catch (e) {
       Get.snackbar('Error', 'Error sending ---> ${e.toString()}');
-      print(e.toString());
+      print('Transaction failed --->${e.toString()}');
       _loading = false;
       update();
     }

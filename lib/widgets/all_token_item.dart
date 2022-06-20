@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wallet/controllers/addTokenToAssetController.dart';
+import 'package:wallet/controllers/assetcontroller.dart';
 import 'package:wallet/models/tokenmodel.dart';
 import 'package:wallet/utils/appColors.dart';
 import 'package:wallet/widgets/title_text.dart';
@@ -14,11 +15,13 @@ class AllTokenItem extends StatelessWidget {
   String tokensymbol;
   String address;
   bool taken;
+  Function? func;
 
   AllTokenItem(
       {required this.tokenname,
       required this.tokensymbol,
       required this.taken,
+      this.func,
       required this.address,
       Key? key})
       : super(key: key);
@@ -26,7 +29,7 @@ class AllTokenItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var switchController = Get.find<AddTokenToAssetController>();
+    var switchController = Get.find<AssetTokenController>();
     // bool truth = token.taken;
     return ListTile(
       leading: Container(
@@ -59,20 +62,22 @@ class AllTokenItem extends StatelessWidget {
               key: ValueKey(tokenname),
               value: taken,
               onChanged: (val) {
-                if (val == true) {
+                if (val) {
                   switchController.addTokenToAssetToken(TokenModel(
                       tokenName: tokenname,
                       deployedAddress: address,
                       tokenSymbol: tokensymbol,
                       taken: taken));
                   updatefn(val);
-                } else if (val == false) {
+                  func!();
+                } else if (!val) {
                   switchController.removeTokenToAssetToken(TokenModel(
                       tokenName: tokenname,
                       deployedAddress: address,
                       tokenSymbol: tokensymbol,
                       taken: taken));
                   updatefn(val);
+                  func!();
                 }
               },
             );

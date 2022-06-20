@@ -9,6 +9,8 @@ import 'package:wallet/controllers/assetcontroller.dart';
 import 'package:wallet/controllers/usercontroller.dart';
 import 'package:wallet/controllers/wallet_creation.dart';
 import 'package:wallet/helpers/contractFunction.dart' as ctFunction;
+import 'package:wallet/helpers/dependencies.dart';
+import 'package:wallet/models/assetmodel.dart';
 import 'package:wallet/screens/root/wallet/addWallet/addwallet.dart';
 import 'package:wallet/screens/sendToken/index.dart';
 import 'package:wallet/utils/appColors.dart';
@@ -26,7 +28,8 @@ import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 
 class Dashboard extends StatelessWidget {
-  Dashboard({Key? key}) : super(key: key);
+  final Function() notifyParent;
+  Dashboard({required this.notifyParent, Key? key}) : super(key: key);
   String? priviteAddress;
   dynamic balance = 0;
 
@@ -139,17 +142,19 @@ class Dashboard extends StatelessWidget {
     }
 
     sn();
+    AssetTokenController ctrl = Get.find<AssetTokenController>();
+    List<AssetModel> items = [];
 
-    return GetBuilder<UserController>(
-      builder: ((controller) {
-        return Scaffold(
-          bottomNavigationBar: Container(
-            height: Dimensions.getProportionalHeight(70),
-          ),
-          body: controller.loading
+    return Scaffold(
+        bottomNavigationBar: Container(
+          height: Dimensions.getProportionalHeight(70),
+        ),
+        body: GetBuilder<UserController>(builder: (controller) {
+          return controller.loading
               ? Center(
                   child: CircularProgressIndicator(
-                      strokeWidth: 2, color: Colors.black))
+                      strokeWidth: 2, color: Colors.black),
+                )
               : controller.currentUserDoc == null
                   ? Center(
                       child: ElevatedButton(
@@ -171,7 +176,8 @@ class Dashboard extends StatelessWidget {
                             children: <Widget>[
                               SizedBox(height: 35),
                               CustomAppBar(
-                                  name: controller.currentUserDoc['user_name']),
+                                  name: controller.currentUserDoc['user_name'],
+                                  func: notifyParent),
                               SizedBox(
                                 height: 40,
                               ),
@@ -203,6 +209,7 @@ class Dashboard extends StatelessWidget {
                               ),
                               GetBuilder<AssetTokenController>(
                                 builder: (ctrl) {
+                                  print(ctrl.assetList.toString());
                                   return ctrl.loading
                                       ? Container(
                                           width: double.maxFinite,
@@ -245,9 +252,63 @@ class Dashboard extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-        );
-      }),
-    );
+                    );
+        }));
   }
 }
+
+// Widget hhb() {
+//   return GetBuilder<AssetTokenController>(
+//     builder: (ctrl) {
+//       print(ctrl.assetList.toString());
+//       return ctrl.loading
+//           ? Container(
+//               width: double.maxFinite,
+//               height: Dimensions.getProportionalHeight(75),
+//               child: Center(
+//                 child: CircularProgressIndicator(),
+//               ),
+//             )
+//           : ctrl.assetList.length == 0
+//               ? Container(
+//                   height: Dimensions.getProportionalHeight(100),
+//                   child: Center(
+//                     child: Text('no asset added'),
+//                   ),
+//                 )
+//               : ListView.builder(
+//                   physics: NeverScrollableScrollPhysics(),
+//                   shrinkWrap: true,
+//                   itemCount: ctrl.assetList.length,
+//                   itemBuilder: (ctx, index) {
+//                     return _transection(
+//                       ctrl.assetList[index].tokenName!,
+//                       ctrl.assetList[index].tokenSymbol!,
+//                       ctrl.assetList[index].tokenBalance!,
+//                       ctrl.assetList[index].tokenIcon!,
+//                     );
+//                   },
+//                 );
+//     },
+//   );
+// }
+
+
+                              // Obx(() {
+                              //   AssetTokenController ctrl =
+                              //       Get.find<AssetTokenController>();
+                              //   print("-----> ${ctrl.assetList.value.length}");
+                              //   return ListView.builder(
+                              //     physics: NeverScrollableScrollPhysics(),
+                              //     shrinkWrap: true,
+                              //     itemCount: ctrl.assetList.value.length,
+                              //     itemBuilder: (ctx, index) {
+                              //       return _transection(
+                              //         ctrl.assetList.value[index].tokenName!,
+                              //         ctrl.assetList.value[index].tokenSymbol!,
+                              //         ctrl.assetList.value[index].tokenBalance!,
+                              //         ctrl.assetList.value[index].tokenIcon!,
+                              //       );
+                              //     },
+                              //   );
+                              // })

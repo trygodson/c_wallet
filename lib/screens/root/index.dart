@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:wallet/controllers/assetcontroller.dart';
 import 'package:wallet/controllers/usercontroller.dart';
 import 'package:wallet/helpers/contractFunction.dart';
 import 'package:wallet/screens/root/dashboard/dashboard.dart';
@@ -27,49 +28,61 @@ class _RootAppState extends State<RootScreen> {
     httpClient = Client();
     ethClient = Web3Client(infruraUrl, httpClient!);
     Get.put(ContractFunctionController());
-
+    Get.find<AssetTokenController>().getBalance();
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant RootScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+
   int activeTab = 0;
-  List barItems = [
-    {
-      "icon": Icons.account_balance_wallet_outlined,
-      "active_icon": Icons.account_balance_wallet,
-      "page": Dashboard(),
-      "title": ""
-    },
-    // {
-    //   "icon": Icons.account_balance_wallet_outlined,
-    //   "active_icon": Icons.account_balance_wallet,
-    //   "page": walletscreen.Wallet(),
-    //   "title": ""
-    // },
-    {
-      "icon": Icons.forum_outlined,
-      "active_icon": Icons.forum_rounded,
-      "page": Container(
-        child: Center(
-          child: Text('KYC'),
+  List barItems(r) {
+    return [
+      {
+        "icon": Icons.account_balance_wallet_outlined,
+        "active_icon": Icons.account_balance_wallet,
+        "page": Dashboard(notifyParent: r),
+        "title": ""
+      },
+      // {
+      //   "icon": Icons.account_balance_wallet_outlined,
+      //   "active_icon": Icons.account_balance_wallet,
+      //   "page": walletscreen.Wallet(),
+      //   "title": ""
+      // },
+      {
+        "icon": Icons.forum_outlined,
+        "active_icon": Icons.forum_rounded,
+        "page": Container(
+          child: Center(
+            child: Text('KYC'),
+          ),
         ),
-      ),
-      "title": ""
-    },
-    {
-      "icon": Icons.person_outline,
-      "active_icon": Icons.person,
-      "page": ProfileScreen(),
-      "title": ""
-    },
-  ];
+        "title": ""
+      },
+      {
+        "icon": Icons.person_outline,
+        "active_icon": Icons.person,
+        "page": ProfileScreen(),
+        "title": ""
+      },
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
+    refresh() {
+      setState(() {});
+    }
+
     return Scaffold(
       // backgroundColor: appBgColor,
-      body: getBarPage(),
+      body: getBarPage(refresh),
       // bottomNavigationBar: getBottomBar1()
-      floatingActionButton: getBottomBar(),
+      floatingActionButton: getBottomBar(refresh),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
     );
@@ -77,17 +90,17 @@ class _RootAppState extends State<RootScreen> {
     // });
   }
 
-  Widget getBarPage() {
+  Widget getBarPage(r) {
     return IndexedStack(
       index: activeTab,
       children: List.generate(
-        barItems.length,
-        (index) => barItems[index]["page"],
+        barItems(r).length,
+        (index) => barItems(r)[index]["page"],
       ),
     );
   }
 
-  Widget getBottomBar() {
+  Widget getBottomBar(r) {
     return Container(
       height: 55,
       width: double.infinity,
@@ -112,11 +125,11 @@ class _RootAppState extends State<RootScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: List.generate(
-          barItems.length,
+          barItems(r).length,
           (index) => BottomBarItem(
             activeTab == index
-                ? barItems[index]["active_icon"]
-                : barItems[index]["icon"],
+                ? barItems(r)[index]["active_icon"]
+                : barItems(r)[index]["icon"],
             "",
             isActive: activeTab == index,
             activeColor: AppColors.lightNavyBlue,

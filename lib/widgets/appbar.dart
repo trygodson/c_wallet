@@ -10,7 +10,8 @@ import 'package:wallet/widgets/title_text.dart';
 
 class CustomAppBar extends StatelessWidget {
   String? name;
-  CustomAppBar({this.name, Key? key}) : super(key: key);
+  final Function func;
+  CustomAppBar({this.name, required this.func, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,10 @@ class CustomAppBar extends StatelessWidget {
           child: SizedBox(),
         ),
         GestureDetector(
-          onTap: () => Get.toNamed('/alltoken'),
+          onTap: () => Get.to(
+            () => AllTokenScreen(refresh: func),
+            transition: Transition.rightToLeft,
+          ),
           child: Icon(
             Icons.short_text,
             color: Theme.of(context).iconTheme.color,
