@@ -7,6 +7,6 @@ class Web3ClientRepo {
   Client? httpClient;
   sn() {
     httpClient = Client();
-    ethClient = Web3Client(infruraUrl, httpClient!);
+    ethClient = Web3Client(alchemyUrl, httpClient!);
   }
 }

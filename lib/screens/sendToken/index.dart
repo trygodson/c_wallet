@@ -7,11 +7,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:wallet/controllers/sendtokencontroller.dart';
+import 'package:wallet/controllers/usercontroller.dart';
 import 'package:wallet/models/tokenmodel.dart';
 import 'package:wallet/screens/qrscanner/index.dart';
+import 'package:wallet/screens/send_confirmation/index.dart';
 import 'package:wallet/utils/appColors.dart';
 import 'package:wallet/utils/dimensions.dart';
 import 'package:wallet/utils/global_style.dart';
+import 'package:wallet/widgets/normalAppBar.dart';
 
 class SendTokenScreen extends StatelessWidget {
   SendTokenScreen({Key? key}) : super(key: key);
@@ -24,19 +27,7 @@ class SendTokenScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.find<SendTokenController>().getTokenList();
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          elevation: 0,
-          title: const Text(
-            'Send Token',
-            style: TextStyle(color: Colors.black),
-          ),
-          iconTheme: IconThemeData(color: Colors.black),
-        ),
-      ),
+      appBar: NormalAppBar(title: 'Send Token'),
       body: SingleChildScrollView(
           child: Container(
         height: Dimensions.screenHeight,
@@ -162,53 +153,57 @@ class SendTokenScreen extends StatelessWidget {
                 SizedBox(
                   height: Dimensions.getProportionalHeight(20),
                 ),
-                GetBuilder<SendTokenController>(builder: (sendCtrl) {
-                  return Container(
-                    width: double.infinity,
-                    height: Dimensions.getProportionalHeight(50),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (selectedDeployedAddress == '') {
-                          Get.snackbar(
-                              'Your Token', 'Please select choice of token');
-                        } else if (_receiverAmountController.text == '') {
-                          Get.snackbar('Amount', 'Amount field is empty');
-                        } else if (_receiverAddressController.text == '') {
-                          Get.snackbar('Address', 'Address field is empty');
-                        } else {
-                          sendCtrl.sendtoken(
-                              int.parse(_receiverAmountController.text),
-                              _receiverAddressController.text,
-                              selectedDeployedAddress);
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          AppColors.navyBlue1,
+                Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: Dimensions.getProportionalHeight(50),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (selectedDeployedAddress == '') {
+                            Get.snackbar(
+                                'Your Token', 'Please select choice of token');
+                          } else if (_receiverAmountController.text == '') {
+                            Get.snackbar('Amount', 'Amount field is empty');
+                          } else if (_receiverAddressController.text == '') {
+                            Get.snackbar('Address', 'Address field is empty');
+                          } else {
+                            String from = Get.find<UserController>()
+                                .currentUserDoc['publicKey'];
+                            Get.to(() => SendConfirmation(
+                                  deployedAddress: selectedDeployedAddress,
+                                  to: _receiverAddressController.text,
+                                  amount: _receiverAmountController.text,
+                                  from: from,
+                                ));
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            AppColors.navyBlue1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Proceed',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.white),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
                       ),
-                      child: sendCtrl.loading
-                          ? CircularProgressIndicator()
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Send',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.white),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Icon(
-                                  Icons.send,
-                                  color: Colors.white,
-                                )
-                              ],
-                            ),
                     ),
-                  );
-                })
+                  ],
+                )
               ],
             )),
       )),

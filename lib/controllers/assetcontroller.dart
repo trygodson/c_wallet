@@ -19,12 +19,13 @@ class AssetTokenController extends GetxController {
   bool _loading = true;
   bool get loading => _loading;
   final Web3ClientRepo web3Repo;
-  List<AssetModel> assetTokenRepo = [];
   // List<AssetModel> _theassetList = [];
+
   List<AssetModel> _assetList = [];
   List<AssetModel> get assetList => _assetList;
 
   List<Map<String, dynamic>> assetToken = [];
+  List<AssetModel> assetTokenRepo = [];
 
   AssetTokenController({required this.web3Repo});
 
@@ -40,15 +41,11 @@ class AssetTokenController extends GetxController {
     return contract;
   }
 
-  List<TokenModel> getTokenList() {
-    return assetTokenRepo as List<TokenModel>;
-  }
-
-  dj(List<AssetModel> tempassetList, EthereumAddress cred,
+  dj(List<AssetModel> assetTokenRepo, EthereumAddress cred,
       Web3Client repoclient, TokenModel e) async {
     double? bal;
-    List<dynamic> result = await query(
-        'balanceOf', [cred], web3Repo.ethClient!, e.deployedAddress!);
+    List<dynamic> result =
+        await query('balanceOf', [cred], repoclient, e.deployedAddress!);
     var data = result[0];
     // bal = bal! + double.parse(data.toString());
     // print("----> dj " + data.toString());
@@ -65,35 +62,22 @@ class AssetTokenController extends GetxController {
 
   getBalance() async {
     // update();
-    _loading = true;
     web3Repo.sn();
-    List<AssetModel> tempassetList = [];
+    _loading = true;
+    update();
     // print('----> aseet token repo ' + assetList.toString());
     dynamic userdata = Get.find<UserController>().currentUserDoc;
     var priviteAddress = userdata['privateKey'];
     var temp = EthPrivateKey.fromHex(priviteAddress!);
     EthereumAddress cred = temp.address;
     for (var e in assetToken) {
-      dj(tempassetList, cred, web3Repo.ethClient!, TokenModel.fromJson(e));
-
-      // List<dynamic> result = await query(
-      //     'balanceOf', [cred], web3Repo.ethClient!, e['deployedaddress']!);
-      // var data = result[0];
-      // // bal = bal! + double.parse(data.toString());
-      // // print("----> dj " + data.toString());
-      // tempassetList.add(
-      //   AssetModel(
-      //     tokenBalance: data.toString(),
-      //     tokenName: e['tokenname'],
-      //     tokenSymbol: e['tokensymbol'],
-      //     tokenIcon: e['tokenlogo'],
-      //   ),
-      // );
+      dj(assetTokenRepo, cred, web3Repo.ethClient!, TokenModel.fromJson(e));
     }
     _assetList = assetTokenRepo;
 
     // _assetList = tempassetList;
     _loading = false;
+    update();
   }
 
   addTokenToAssetToken(TokenModel token) {
@@ -101,7 +85,7 @@ class AssetTokenController extends GetxController {
 
     if (!assetToken.any((element) => mapEquals(element, token.toJson()))) {
       assetToken.add(token.toJson());
-      // // print();
+      // assetToken = List.from(assetToken)..add(token.toJson());
       tokens[tokens.indexWhere((tokens) =>
               tokens.toJson()['tokenname'] == token.toJson()['tokenname'])]
           .taken = true;
@@ -119,6 +103,7 @@ class AssetTokenController extends GetxController {
     if (assetToken.any((element) => mapEquals(element, token.toJson()))) {
       assetToken
           .removeWhere((element) => element['tokenname'] == token.tokenName);
+      // assetToken.remove(token.toJson());
 
       tokens[tokens.indexWhere((tokens) =>
               tokens.toJson()['tokenname'] == token.toJson()['tokenname'])]

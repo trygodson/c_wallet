@@ -14,8 +14,8 @@ var httpClient = Client;
 // var authController = AuthController.instance;
 String infruraUrl =
     'https://ropsten.infura.io/v3/4113b4cfcb874aaead699420a5dfb0a9';
-// String alchemyUrl =
-//     'https://eth-rinkeby.alchemyapi.io/v2/dk4gNU8G4TKHt6WkLF241fiIwmMTCIJI';
+String alchemyUrl =
+    'https://eth-goerli.alchemyapi.io/v2/Q0X-Go0FViX_mngKhSp9g-OAgxGYPOcY';
 // String infruraUrl =
 //     'https://kovan.infura.io/v3/4113b4cfcb874aaead699420a5dfb0a9';
 
@@ -28,3 +28,16 @@ String deployedcontractAddress = '0xB9A305B9f748595E9d37c2495f22078b322944BF';
 
 //cmc comic
 // String deployedcontractAddress = '0xf033De665baF30e1B7a922A1B3B8C2AD88B51906';
+
+
+//Alchemy Goerli CMC
+//0xCFeD6633469C8FBA46e7f09798f894cf7Aca2EFB
+
+
+//Alchemy Goerli GLD
+//0xb751940ef73d17b459b3001bccd65c49014acd01
+
+
+//Alchemy Goerli WAE
+//0xa2CFAD051eB6a320DfBfBC44B8474EA611338a7b
+
